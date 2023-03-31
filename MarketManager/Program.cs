@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarketManager.Servises;
+using System;
 
 namespace MarketManager
 {
@@ -11,6 +12,7 @@ namespace MarketManager
             Console.WriteLine("------------------------------");
             Console.WriteLine("Please choose one of options below");
 
+            var servise = new MarketManagerServise();
             var shouldContinue = "";
             do
             {
@@ -27,7 +29,7 @@ namespace MarketManager
                         Console.WriteLine("I will buy some products");
                         break;
                     case "2":
-                        ManageEmpoyeers();
+                        ManageEmpoyeers(servise);
                         break;
                     case "3":
                         ManageProducts();
@@ -91,7 +93,7 @@ namespace MarketManager
             }
         }
 
-        private static void ManageEmpoyeers()
+        private static void ManageEmpoyeers(MarketManagerServise marketManagerServise)
         {
             Console.WriteLine("Please choose one of options below:");
             Console.WriteLine("1.Create Manager");
@@ -102,10 +104,10 @@ namespace MarketManager
             switch (userInputManageEmployer)
             {
                 case "1":
-                    Console.WriteLine("1.I will create Manager");
+                    marketManagerServise.CreateManager();
                     break;
                 case "2":
-                    Console.WriteLine("2.I will create Employers");
+                    marketManagerServise.CreateEmployee();
                     break;
                 case "3":
                     Console.WriteLine("3.I will delete Employers");
