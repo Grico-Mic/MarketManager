@@ -22,7 +22,7 @@ namespace MarketManager.Servises
         {
             Console.WriteLine("Please enter Id number");
             var userInputIdNumber = Console.ReadLine();
-            var checkIdIfExist = GetAccountByNumber(userInputIdNumber);
+            var checkIdIfExist = CheckForIdExist(userInputIdNumber);
             if (checkIdIfExist == null)
             {
                 Console.WriteLine("Please enter a name");
@@ -50,7 +50,7 @@ namespace MarketManager.Servises
             Console.WriteLine("This operation can be handle ONLY by Manager!!!");
             Console.WriteLine("Please enter your Id");
             var userManagerId = Console.ReadLine();
-            
+
             Employee manager = GetManager(userManagerId);
 
             if (manager != null)
@@ -58,27 +58,40 @@ namespace MarketManager.Servises
                 Console.WriteLine("Please enter Id number");
                 var userInputIdNumber = Console.ReadLine();
 
-                var checkIdIfExist = GetAccountByNumber(userInputIdNumber);
-                if (checkIdIfExist == null )
+                var checkIdIfExist = CheckForIdExist(userInputIdNumber);
+                if (checkIdIfExist != null )
                 {
-                    Console.WriteLine("Please enter a name");
-                    var userInputName = Console.ReadLine();
-                    Console.WriteLine("Please enter a surname");
-                    var userInputSurname = Console.ReadLine();
-
-                    var employers = new Employee();
-                    employers.Id = userInputIdNumber;
-                    employers.Name = userInputName;
-                    employers.Surname = userInputSurname;
-                    employers.Role = RoleEnum.Employee;
-
-                    _employers.Add(employers);
+                    Console.WriteLine($"Id number {userInputIdNumber} alredy exist.");
+                    return;
                 }
-                else
-                {
-                    Console.WriteLine("Ivalid Input");
-                }
+              
+                Console.WriteLine("Please enter a name");
+                var userInputName = Console.ReadLine();
+                Console.WriteLine("Please enter a surname");
+                var userInputSurname = Console.ReadLine();
+
+                var employers = new Employee();
+                employers.Id = userInputIdNumber;
+                employers.Name = userInputName;
+                employers.Surname = userInputSurname;
+                employers.Role = RoleEnum.Employee;
+
+                _employers.Add(employers);
+                return;
             }
+            bool IsUneployded = IsUnemploye(userManagerId);
+            if (IsUneployded)
+            {
+                Console.WriteLine($"Person with Id {userManagerId} does not exist.");
+                return;
+            }
+            bool isManager = IsManager(userManagerId);
+            if (isManager)
+            {
+                Console.WriteLine("To create employee the requestor must have manager role.");
+                return;
+            }
+            
         }
 
         private Employee GetManager(string employeeId)
@@ -87,11 +100,20 @@ namespace MarketManager.Servises
                 employee.Id == employeeId &&
                 employee.Role == RoleEnum.Manager);
         }
-        private Employee GetAccountByNumber(string accountNumber)
+        private Employee CheckForIdExist(string accountNumber)
         {
             return _employers.FirstOrDefault(x => x.Id == accountNumber);
-
-
+        }
+        private bool IsManager(string managerId)
+        {
+            var e = _employers.FirstOrDefault(e => e.Id == managerId && e.Role == RoleEnum.Manager);
+            return e == null;
+        }
+        private bool IsUnemploye(string managerId)
+        {
+            var e = _employers.FirstOrDefault(e => e.Id == managerId);
+            return e == null;
         }
     }
+
 }
