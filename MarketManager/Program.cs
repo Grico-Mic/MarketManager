@@ -110,7 +110,7 @@ namespace MarketManager
                     marketManagerServise.CreateEmployee();
                     break;
                 case "3":
-                    Console.WriteLine("3.I will delete Employers");
+                    marketManagerServise.DeleteEmployee();
                     break;
                 default:
                     Console.WriteLine("Invalid Input");

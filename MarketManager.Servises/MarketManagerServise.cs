@@ -55,7 +55,7 @@ namespace MarketManager.Servises
 
             if (manager != null)
             {
-                Console.WriteLine("Please enter Id number");
+                Console.WriteLine("Please enter Id number for the new employee");
                 var userInputIdNumber = Console.ReadLine();
 
                 var checkIdIfExist = CheckForIdExist(userInputIdNumber);
@@ -94,6 +94,46 @@ namespace MarketManager.Servises
             
         }
 
+        public void DeleteEmployee()
+        {
+            Console.WriteLine("This operation can be handle ONLY by Manager!!!");
+            Console.WriteLine("Please enter your Id");
+            var userManagerId = Console.ReadLine();
+
+            Employee manager = GetManager(userManagerId);
+            if (manager != null)
+            {
+                Console.WriteLine("Please enter number of employe you want to delete");
+                var userInput = Console.ReadLine();
+
+                bool checkIfExistForDelete = IsUnemploye(userInput);
+                if (checkIfExistForDelete)
+                {
+                    Console.WriteLine($"Person with Id {userInput} does not exist.");
+                    return;
+                }
+
+                var employeeToRemove = _employers.FirstOrDefault(x => x.Id == userInput);
+                
+                _employers.Remove(employeeToRemove);
+                Console.WriteLine("Item was deletet");
+                return;
+            }
+            bool IsUneployded = IsUnemploye(userManagerId);
+            if (IsUneployded)
+            {
+                Console.WriteLine($"Person with Id {userManagerId} does not exist.");
+                return;
+            }
+            bool isManager = IsManager(userManagerId);
+            if (isManager)
+            {
+                Console.WriteLine("To delete employee the requestor must have manager role.");
+                return;
+            }
+           
+        }
+
         private Employee GetManager(string employeeId)
         {
             return _employers.FirstOrDefault(employee =>
@@ -114,6 +154,8 @@ namespace MarketManager.Servises
             var e = _employers.FirstOrDefault(e => e.Id == managerId);
             return e == null;
         }
+
+        
     }
 
 }
