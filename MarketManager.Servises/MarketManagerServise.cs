@@ -43,7 +43,6 @@ namespace MarketManager.Servises
                 Console.WriteLine($"Number with id number {checkIdIfExist.Id} alredy exist.");
             }
         }
-
         public void CreateEmployee()
         {
 
@@ -93,7 +92,6 @@ namespace MarketManager.Servises
             }
             
         }
-
         public void DeleteEmployee()
         {
             Console.WriteLine("This operation can be handle ONLY by Manager!!!");
@@ -112,13 +110,56 @@ namespace MarketManager.Servises
                     Console.WriteLine($"Person with Id {userInput} does not exist.");
                     return;
                 }
-
-                var employeeToRemove = _employers.FirstOrDefault(x => x.Id == userInput);
                 
+                var employeeToRemove = _employers.FirstOrDefault(x => x.Id == userInput);
                 _employers.Remove(employeeToRemove);
-                Console.WriteLine("Item was deletet");
                 return;
             }
+            bool IsUneployded = IsUnemploye(userManagerId);
+            if (IsUneployded)
+            {
+                Console.WriteLine($"Person with Id {userManagerId} does not exist.");
+                return;
+            }
+            bool isManager = IsManager(userManagerId);
+            if (isManager)
+            { 
+                Console.WriteLine("To delete employee the requestor must have manager role.");
+                return;
+            }
+        }
+
+        public void CreateProduct()
+        {
+            Console.WriteLine("This operation can be handle ONLY by Manager!!!");
+            Console.WriteLine("Please enter your Id");
+            var userManagerId = Console.ReadLine().ToLower().Trim();
+
+            Employee manager = GetManager(userManagerId);
+            if (manager != null)
+            {
+                Console.WriteLine("Please enter the name of product.");
+                var nameOfProduct = Console.ReadLine();
+                bool productNameExist = ProductNameExist(nameOfProduct);
+                if (!productNameExist )
+                {
+                    Console.WriteLine($"Product with name {nameOfProduct} alredy exist.");
+                    return;
+                }
+
+                Console.WriteLine("Please enter the quantity.");
+                var quantityOfProduct = Console.ReadLine();
+                Console.WriteLine("Please enter the price");
+                var priceOfProduct = Console.ReadLine();
+
+                var product = new Product();
+                product.Name = nameOfProduct;
+                product.Quantity = int.Parse(quantityOfProduct);
+                product.Price = int.Parse(priceOfProduct);
+
+                _product.Add(product);
+            }
+
             bool IsUneployded = IsUnemploye(userManagerId);
             if (IsUneployded)
             {
@@ -131,8 +172,44 @@ namespace MarketManager.Servises
                 Console.WriteLine("To delete employee the requestor must have manager role.");
                 return;
             }
-           
         }
+        public void DeleteProduct()
+        {
+            Console.WriteLine("This operation can be handle ONLY by Manager!!!");
+            Console.WriteLine("Please enter your Id");
+            var userManagerId = Console.ReadLine();
+
+            Employee manager = GetManager(userManagerId);
+            if (manager != null)
+            {
+                Console.WriteLine("Please enter the name of product you want to delete");
+                var userInputproductForDelete = Console.ReadLine();
+
+                bool checkIfExistForDelete = ProductNameExist(userInputproductForDelete);
+                if (checkIfExistForDelete)
+                {
+                    Console.WriteLine($"Product with name {userInputproductForDelete} does not exist.");
+                    return;
+                }
+
+                var productToDelete = _product.FirstOrDefault(p => p.Name == userInputproductForDelete);
+                _product.Remove(productToDelete);
+            }
+            bool IsUneployded = IsUnemploye(userManagerId);
+            if (IsUneployded)
+            {
+                Console.WriteLine($"Person with Id {userManagerId} does not exist.");
+                return;
+            }
+            bool isManager = IsManager(userManagerId);
+            if (isManager)
+            {
+                Console.WriteLine("To delete product the requestor must have manager role.");
+                return;
+            }
+        }
+
+
 
         private Employee GetManager(string employeeId)
         {
@@ -154,8 +231,11 @@ namespace MarketManager.Servises
             var e = _employers.FirstOrDefault(e => e.Id == managerId);
             return e == null;
         }
+        private bool ProductNameExist(string product)
+        {
+            var p = _product.FirstOrDefault(p => p.Name == product);
 
-        
+            return p == null;
+        }
     }
-
 }

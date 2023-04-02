@@ -32,7 +32,7 @@ namespace MarketManager
                         ManageEmpoyeers(servise);
                         break;
                     case "3":
-                        ManageProducts();
+                        ManageProducts(servise);
                         break;
                     case "4":
                         ManageCashRegister();
@@ -56,7 +56,7 @@ namespace MarketManager
             Console.WriteLine("2.Delete CashRegister");
 
 
-            var userInputManageCashRegister = Console.ReadLine();
+            var userInputManageCashRegister = Console.ReadLine().Trim();
             switch (userInputManageCashRegister)
             {
                 case "1":
@@ -71,21 +71,21 @@ namespace MarketManager
             }
         }
 
-        private static void ManageProducts()
+        private static void ManageProducts(MarketManagerServise marketManagerServise)
         {
             Console.WriteLine("Please choose one of options below:");
             Console.WriteLine("1.Create Product");
             Console.WriteLine("2.Delete Product");
 
 
-            var userInputManageProducts = Console.ReadLine();
+            var userInputManageProducts = Console.ReadLine().Trim().ToLower();
             switch (userInputManageProducts)
             {
                 case "1":
-                    Console.WriteLine("1.I will create products");
+                    marketManagerServise.CreateProduct();
                     break;
                 case "2":
-                    Console.WriteLine("2.I will delete products");
+                    marketManagerServise.DeleteProduct();
                     break;
                 default:
                     Console.WriteLine("Invalid Input");
@@ -100,7 +100,7 @@ namespace MarketManager
             Console.WriteLine("2.Create Employer");
             Console.WriteLine("3.Delete Employer");
 
-            var userInputManageEmployer = Console.ReadLine();
+            var userInputManageEmployer = Console.ReadLine().Trim().ToLower();
             switch (userInputManageEmployer)
             {
                 case "1":
